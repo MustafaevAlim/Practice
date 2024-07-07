@@ -1,12 +1,29 @@
 package repository
 
 import (
-	"context"
-
-	"github.com/olezhek28/clean-architecture/internal/model"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	"log"
 )
 
-type UserRepository interface {
-	Create(ctx context.Context, userUUID string, info *model.UserInfo) error
-	Get(ctx context.Context, uuid string) (*model.User, error)
+var db *gorm.DB
+
+func InitDB() *gorm.DB {
+	var err error
+	dsn := "host=localhost user=postgres password=postgres dbname=postgres sslmode=disable"
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("Ошибка подключения к базе данных: %v", err)
+	}
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Fatalf("Ошибка получения DB из GORM: %v", err)
+	}
+
+	err = sqlDB.Ping()
+	if err != nil {
+		log.Fatalf("Ошибка проверки подключения к базе данных: %v", err)
+	}
+	return db
 }

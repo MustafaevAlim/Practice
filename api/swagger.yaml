@@ -1,0 +1,201 @@
+basePath: /
+definitions:
+  model.Sale:
+    properties:
+      company:
+        type: string
+      count:
+        type: integer
+      name_prod:
+        type: string
+      price:
+        type: number
+    required:
+    - company
+    - count
+    - name_prod
+    - price
+    type: object
+  model.User:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        maxLength: 32
+        minLength: 8
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server for a pet store.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /auth:
+    post:
+      consumes:
+      - application/json
+      description: Авторизует пользователя и возвращает JWT токен
+      parameters:
+      - description: Пользователь
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Авторизация пользователя
+      tags:
+      - auth
+  /hello:
+    get:
+      description: Responds with a "Hello, World!" message
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Hello, World!
+          schema:
+            type: string
+      summary: Returns a greeting message
+      tags:
+      - hello
+  /pdfReport:
+    get:
+      description: Генерирует и возвращает PDF отчет
+      produces:
+      - application/pdf
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получить PDF отчет
+      tags:
+      - reports
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Handles user registration by binding and validating the user input
+      parameters:
+      - description: User to register
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Registers a new user
+      tags:
+      - users
+  /sales:
+    post:
+      consumes:
+      - application/json
+      description: Создает новую запись о продаже в системе
+      parameters:
+      - description: Информация о продаже
+        in: body
+        name: sale
+        required: true
+        schema:
+          $ref: '#/definitions/model.Sale'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное создание продажи
+          schema:
+            $ref: '#/definitions/model.Sale'
+        "400":
+          description: Ошибка в запросе
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Создание новой продажи
+      tags:
+      - sales
+  /welcome:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает приветственное сообщение для авторизованного пользователя
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Welcome {email}!
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Приветствие пользователя
+      tags:
+      - user
+securityDefinitions:
+  BearerAuth:
+    description: 'Provide your JWT token as: Bearer {token}'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
