@@ -76,26 +76,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/hello": {
-            "get": {
-                "description": "Responds with a \"Hello, World!\" message",
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "hello"
-                ],
-                "summary": "Returns a greeting message",
-                "responses": {
-                    "200": {
-                        "description": "Hello, World!",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/pdfReport": {
             "get": {
                 "description": "Генерирует и возвращает PDF отчет",
@@ -317,7 +297,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Swagger Example API",
-	Description:      "This is a sample server for a pet store.",
+	Description:      "This is a sample pdfReport for a pet store.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

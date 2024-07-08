@@ -37,7 +37,7 @@ info:
     email: support@swagger.io
     name: API Support
     url: http://www.swagger.io/support
-  description: This is a sample server for a pet store.
+  description: This is a sample pdfReport for a pet store.
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
@@ -79,19 +79,6 @@ paths:
       summary: Авторизация пользователя
       tags:
       - auth
-  /hello:
-    get:
-      description: Responds with a "Hello, World!" message
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: Hello, World!
-          schema:
-            type: string
-      summary: Returns a greeting message
-      tags:
-      - hello
   /pdfReport:
     get:
       description: Генерирует и возвращает PDF отчет
