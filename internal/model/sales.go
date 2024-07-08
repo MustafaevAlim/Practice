@@ -6,6 +6,7 @@ type Sale struct {
 	Price       float64 `json:"price" validate:"required,gt=0"`
 	Count       int     `json:"count" validate:"required,gt=0.0"`
 }
+
 type InfoSales struct {
 	NameProduct string
 	Company     string
