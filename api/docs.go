@@ -24,6 +24,41 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/JSONReport": {
+            "get": {
+                "description": "Получает список всех продаж из базы данных и возвращает его в формате JSON",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reports"
+                ],
+                "summary": "Получить все продажи",
+                "responses": {
+                    "200": {
+                        "description": "Список всех продаж",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.InfoSales"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка сервера",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/auth": {
             "post": {
                 "description": "Авторизует пользователя и возвращает JWT токен",
@@ -193,6 +228,55 @@ const docTemplate = `{
                 }
             }
         },
+        "/sales/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Удаляет запись о продаже по ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sales"
+                ],
+                "summary": "Удаление записи о продаже",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID записи о продаже",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesfully deleted",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/welcome": {
             "get": {
                 "security": [
@@ -235,6 +319,26 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "model.InfoSales": {
+            "type": "object",
+            "properties": {
+                "company": {
+                    "type": "string"
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "name_prod": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "total": {
+                    "type": "number"
+                }
+            }
+        },
         "model.Sale": {
             "type": "object",
             "required": [
@@ -282,7 +386,7 @@ const docTemplate = `{
     },
     "securityDefinitions": {
         "BearerAuth": {
-            "description": "Provide your JWT token as: Bearer {token}",
+            "description": "Введите JWT токен следующим образом: \"Bearer {токен}\"",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"
@@ -296,8 +400,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "Swagger Example API",
-	Description:      "This is a sample pdfReport for a pet store.",
+	Title:            "Generate Geport",
+	Description:      "Генерация отчета по продажам за месяц.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

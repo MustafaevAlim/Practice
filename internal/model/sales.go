@@ -8,9 +8,9 @@ type Sale struct {
 }
 
 type InfoSales struct {
-	NameProduct string
-	Company     string
-	Price       float64
-	Count       int
-	Total       float64
+	NameProduct string  `json:"name_prod"`
+	Company     string  `json:"company"`
+	Price       float64 `json:"price"`
+	Count       int     `json:"count"`
+	Total       float64 `json:"total"`
 }

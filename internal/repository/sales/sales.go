@@ -2,21 +2,14 @@ package sales
 
 import (
 	"Practice/internal/model"
-	"Practice/internal/repository"
 	"Practice/internal/repository/sales/converter"
 	repoModel "Practice/internal/repository/sales/model"
 	"fmt"
+	"gorm.io/gorm"
 	"log"
 )
 
-var db = repository.InitDB()
-
-func InRepo(sale model.Sale) {
-	err := db.AutoMigrate(&repoModel.SalesRepo{})
-	if err != nil {
-		panic(err)
-	}
-
+func InRepo(sale model.Sale, db *gorm.DB) {
 	s := repoModel.SalesRepo{NameProduct: sale.NameProduct, Company: sale.Company,
 		Price: sale.Price, Count: sale.Count, Total: (sale.Price * float64(sale.Count))}
 	result := db.Create(&s)
@@ -25,11 +18,13 @@ func InRepo(sale model.Sale) {
 	}
 }
 
-func GetAllSales() []model.InfoSales {
-	err := db.AutoMigrate(&repoModel.SalesRepo{})
-	if err != nil {
-		panic(err)
+func Del(id int, db *gorm.DB) {
+	if err := db.Delete(&repoModel.SalesRepo{}, id).Error; err != nil {
+		log.Fatalf("failed to delete record: %v", err)
 	}
+}
+
+func GetAllSales(db *gorm.DB) []model.InfoSales {
 	var AllSales = make([]repoModel.SalesRepo, 0)
 	result := db.Find(&AllSales)
 	if result.Error != nil {
@@ -37,7 +32,7 @@ func GetAllSales() []model.InfoSales {
 	}
 	return Map(AllSales, converter.ToSalesInfoFromRepo)
 }
-func LargestSales(param string) []model.InfoSales {
+func LargestSales(param string, db *gorm.DB) []model.InfoSales {
 	var sales []repoModel.SalesRepo
 	if err := db.Order(fmt.Sprintf("%s desc", param)).Limit(3).Find(&sales).Error; err != nil {
 		log.Fatal("Failed to retrieve products:", err)
@@ -45,7 +40,7 @@ func LargestSales(param string) []model.InfoSales {
 	return Map(sales, converter.ToSalesInfoFromRepo)
 }
 
-func LowestSales(param string) []model.InfoSales {
+func LowestSales(param string, db *gorm.DB) []model.InfoSales {
 	var sales []repoModel.SalesRepo
 	if err := db.Order(param).Limit(3).Find(&sales).Error; err != nil {
 		log.Fatal("Failed to retrieve products:", err)

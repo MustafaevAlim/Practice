@@ -15,16 +15,16 @@ import (
 // @Accept       json
 // @Produce      json
 // @Param        user  body      model.User  true  "Пользователь"
-// @Success      200   {object}  map[string]string
+// @Success 	 200   {object}  map[string]string
 // @Failure      400   {object}  map[string]string
 // @Failure      500   {object}  string
 // @Router       /auth [post]
-func Authorization(c echo.Context) error {
+func (d *Database) Authorization(c echo.Context) error {
 	u := new(model.User)
 	if err := c.Bind(u); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid input"})
 	}
-	userDB, err := user.GetFromEmail(u.Email)
+	userDB, err := user.GetFromEmail(u.Email, d.DB)
 	if err != nil {
 		panic(err)
 	}
@@ -34,6 +34,5 @@ func Authorization(c echo.Context) error {
 		panic(err)
 	}
 	token := service.GenerateJWT(u.Email)
-
 	return c.JSON(http.StatusOK, map[string]string{"token": token})
 }

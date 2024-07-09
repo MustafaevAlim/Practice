@@ -17,11 +17,12 @@ import (
 // @Success      200   {object}  model.User
 // @Failure      400   {string}  string "Bad Request"
 // @Router       /register [post]
-func Registration(c echo.Context) error {
+func (d *Database) Registration(c echo.Context) error {
 	u := new(model.User)
 	if err := c.Bind(u); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid input"})
 	}
-	user.InRepo(*u)
+
+	user.InRepo(*u, d.DB)
 	return c.JSON(http.StatusOK, u)
 }

@@ -2,19 +2,23 @@ package app
 
 import (
 	_ "Practice/api"
+	"Practice/internal/repository"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"gorm.io/gorm"
 	"log"
 	"net/http"
 )
 
 type App struct {
 	EchoServer *echo.Echo
+	DB         *gorm.DB
 }
 
 func NewApp() (*App, error) {
 	app := &App{}
 	app.EchoServer = echo.New()
+	app.DB = repository.InitDB()
 	return app, nil
 }
 

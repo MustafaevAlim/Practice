@@ -1,5 +1,18 @@
 basePath: /
 definitions:
+  model.InfoSales:
+    properties:
+      company:
+        type: string
+      count:
+        type: integer
+      name_prod:
+        type: string
+      price:
+        type: number
+      total:
+        type: number
+    type: object
   model.Sale:
     properties:
       company:
@@ -37,14 +50,38 @@ info:
     email: support@swagger.io
     name: API Support
     url: http://www.swagger.io/support
-  description: This is a sample pdfReport for a pet store.
+  description: Генерация отчета по продажам за месяц.
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
-  title: Swagger Example API
+  title: Generate Geport
   version: "1.0"
 paths:
+  /JSONReport:
+    get:
+      consumes:
+      - application/json
+      description: Получает список всех продаж из базы данных и возвращает его в формате
+        JSON
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список всех продаж
+          schema:
+            items:
+              $ref: '#/definitions/model.InfoSales'
+            type: array
+        "500":
+          description: Ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получить все продажи
+      tags:
+      - reports
   /auth:
     post:
       consumes:
@@ -154,6 +191,37 @@ paths:
       summary: Создание новой продажи
       tags:
       - sales
+  /sales/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаляет запись о продаже по ID
+      parameters:
+      - description: ID записи о продаже
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Succesfully deleted
+          schema:
+            type: string
+        "400":
+          description: Неверный ID
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Удаление записи о продаже
+      tags:
+      - sales
   /welcome:
     get:
       consumes:
@@ -181,7 +249,7 @@ paths:
       - user
 securityDefinitions:
   BearerAuth:
-    description: 'Provide your JWT token as: Bearer {token}'
+    description: 'Введите JWT токен следующим образом: "Bearer {токен}"'
     in: header
     name: Authorization
     type: apiKey

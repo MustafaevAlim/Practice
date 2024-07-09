@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-// GetPdfReport godoc
+// PdfReport godoc
 // @Summary      Получить PDF отчет
 // @Description  Генерирует и возвращает PDF отчет
 // @Tags         reports
@@ -14,8 +14,8 @@ import (
 // @Success      200  {file}  file
 // @Failure      500  {object}  map[string]string  "Внутренняя ошибка сервера"
 // @Router       /pdfReport [get]
-func GetPdfReport(c echo.Context) error {
-	pdfBytes, err := service.MakePdf()
+func (d *Database) PdfReport(c echo.Context) error {
+	pdfBytes, err := service.MakePdf(d.DB)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to generate PDF"})
 	}

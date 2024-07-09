@@ -62,7 +62,8 @@ func GenerateJWT(email string) string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString(config.JwtKey)
 	if err != nil {
-		return err.Error()
+		panic(err)
 	}
+
 	return tokenString
 }

@@ -18,11 +18,11 @@ import (
 // @Failure      400   {object}  map[string]string  "Ошибка в запросе"
 // @Router       /sales [post]
 // @security BearerAuth
-func NewSale(c echo.Context) error {
+func (d *Database) NewSale(c echo.Context) error {
 	s := new(model.Sale)
 	if err := c.Bind(s); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid input"})
 	}
-	sales.InRepo(*s)
+	sales.InRepo(*s, d.DB)
 	return c.JSON(http.StatusOK, s)
 }

@@ -17,7 +17,7 @@ import (
 // @Failure      401  {string}  string  "Unauthorized"
 // @Router       /welcome [get]
 // @security BearerAuth
-func Welcome(c echo.Context) error {
+func (d *Database) Welcome(c echo.Context) error {
 	// Получение email из контекста
 	email := c.Get("userEmail").(string)
 	return c.String(http.StatusOK, fmt.Sprintf("Welcome %s!", email))

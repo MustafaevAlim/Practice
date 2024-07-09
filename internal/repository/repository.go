@@ -1,17 +1,28 @@
 package repository
 
 import (
+	repoModel "Practice/internal/repository/sales/model"
+	"Practice/internal/repository/user"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
 )
 
-func InitDB() (db *gorm.DB) {
-	var err error
+func InitDB() *gorm.DB {
 	dsn := "host=localhost user=postgres password=postgres dbname=postgres sslmode=disable"
-	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Ошибка подключения к базе данных: %v", err)
+	}
+
+	err = db.AutoMigrate(&user.UserRepo{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = db.AutoMigrate(&repoModel.SalesRepo{})
+	if err != nil {
+		panic(err)
 	}
 
 	sqlDB, err := db.DB()

@@ -6,13 +6,17 @@ import (
 	"Practice/internal/app"
 	"Practice/internal/service"
 	echoSwagger "github.com/swaggo/echo-swagger"
+	"gorm.io/gorm"
 )
 
-func RouteController(a *app.App) {
-	a.EchoServer.POST("/register", controllers.Registration)
-	a.EchoServer.POST("/auth", controllers.Authorization)
-	a.EchoServer.POST("/sales", controllers.NewSale, service.JWTMiddleware)
-	a.EchoServer.GET("/pdfReport", controllers.GetPdfReport)
+func RouteController(a *app.App, db *gorm.DB) {
+	DB := controllers.NewDatabase(db)
+	a.EchoServer.POST("/register", DB.Registration)
+	a.EchoServer.POST("/auth", DB.Authorization)
+	a.EchoServer.POST("/sales", DB.NewSale, service.JWTMiddleware)
+	a.EchoServer.DELETE("/sales/:id", DB.DelSale, service.JWTMiddleware)
+	a.EchoServer.GET("/pdfReport", DB.PdfReport)
+	a.EchoServer.GET("/JSONReport", DB.JSONReport)
 	a.EchoServer.GET("/swagger/*", echoSwagger.WrapHandler)
-	a.EchoServer.GET("/welcome", controllers.Welcome, service.JWTMiddleware)
+	a.EchoServer.GET("/welcome", DB.Welcome, service.JWTMiddleware)
 }
