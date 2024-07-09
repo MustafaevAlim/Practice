@@ -6,6 +6,8 @@ definitions:
         type: string
       count:
         type: integer
+      date:
+        type: string
       name_prod:
         type: string
       price:
@@ -139,9 +141,9 @@ paths:
     post:
       consumes:
       - application/json
-      description: Handles user registration by binding and validating the user input
+      description: Регистрирует нового пользователя на основе переданных данных
       parameters:
-      - description: User to register
+      - description: Данные пользователя
         in: body
         name: user
         required: true
@@ -151,14 +153,14 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: Успешная регистрация пользователя
           schema:
             $ref: '#/definitions/model.User'
         "400":
-          description: Bad Request
+          description: Неверный ввод данных
           schema:
             type: string
-      summary: Registers a new user
+      summary: Регистрация нового пользователя
       tags:
       - users
   /sales:

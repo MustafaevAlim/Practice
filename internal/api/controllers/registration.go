@@ -7,16 +7,16 @@ import (
 	"net/http"
 )
 
-// Registration godoc
-// @Summary      Registers a new user
-// @Description  Handles user registration by binding and validating the user input
-// @Tags         users
-// @Accept       json
-// @Produce      json
-// @Param        user  body      model.User  true  "User to register"
-// @Success      200   {object}  model.User
-// @Failure      400   {string}  string "Bad Request"
-// @Router       /register [post]
+// Registration регистрирует нового пользователя
+// @Summary Регистрация нового пользователя
+// @Description Регистрирует нового пользователя на основе переданных данных
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param user body model.User true "Данные пользователя"
+// @Success 200 {object} model.User "Успешная регистрация пользователя"
+// @Failure 400 {string} string "Неверный ввод данных"
+// @Router /register [post]
 func (d *Database) Registration(c echo.Context) error {
 	u := new(model.User)
 	if err := c.Bind(u); err != nil {

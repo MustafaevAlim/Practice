@@ -18,7 +18,6 @@ import (
 // @Router       /welcome [get]
 // @security BearerAuth
 func (d *Database) Welcome(c echo.Context) error {
-	// Получение email из контекста
 	email := c.Get("userEmail").(string)
 	return c.String(http.StatusOK, fmt.Sprintf("Welcome %s!", email))
 }

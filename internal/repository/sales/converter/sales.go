@@ -12,6 +12,7 @@ func ToSalesInfoFromRepo(sale repoModel.SalesRepo) model.InfoSales {
 		Price:       sale.Price,
 		Count:       sale.Count,
 		Total:       sale.Total,
+		Date:        sale.CreatedAt,
 	}
 
 }

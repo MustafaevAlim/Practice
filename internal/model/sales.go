@@ -1,5 +1,7 @@
 package model
 
+import "time"
+
 type Sale struct {
 	NameProduct string  `json:"name_prod" validate:"required"`
 	Company     string  `json:"company" validate:"required,email"`
@@ -8,9 +10,10 @@ type Sale struct {
 }
 
 type InfoSales struct {
-	NameProduct string  `json:"name_prod"`
-	Company     string  `json:"company"`
-	Price       float64 `json:"price"`
-	Count       int     `json:"count"`
-	Total       float64 `json:"total"`
+	NameProduct string    `json:"name_prod"`
+	Company     string    `json:"company"`
+	Price       float64   `json:"price"`
+	Count       int       `json:"count"`
+	Total       float64   `json:"total"`
+	Date        time.Time `json:"date"`
 }

@@ -142,7 +142,7 @@ const docTemplate = `{
         },
         "/register": {
             "post": {
-                "description": "Handles user registration by binding and validating the user input",
+                "description": "Регистрирует нового пользователя на основе переданных данных",
                 "consumes": [
                     "application/json"
                 ],
@@ -152,10 +152,10 @@ const docTemplate = `{
                 "tags": [
                     "users"
                 ],
-                "summary": "Registers a new user",
+                "summary": "Регистрация нового пользователя",
                 "parameters": [
                     {
-                        "description": "User to register",
+                        "description": "Данные пользователя",
                         "name": "user",
                         "in": "body",
                         "required": true,
@@ -166,13 +166,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Успешная регистрация пользователя",
                         "schema": {
                             "$ref": "#/definitions/model.User"
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "Неверный ввод данных",
                         "schema": {
                             "type": "string"
                         }
@@ -327,6 +327,9 @@ const docTemplate = `{
                 },
                 "count": {
                     "type": "integer"
+                },
+                "date": {
+                    "type": "string"
                 },
                 "name_prod": {
                     "type": "string"

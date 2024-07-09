@@ -10,23 +10,23 @@ import (
 	"strconv"
 )
 
-var widths = []float64{60, 60, 20, 20, 30}
+var widths = []float64{50, 45, 20, 20, 30, 25}
 
 func MakePdf(db *gorm.DB) ([]byte, error) {
 	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.AddPage()
 	pdf.SetFont("Arial", "B", 12)
-	createHeaderTable(pdf, "Company", "Name Product", "Price", "Count", "Total")
+	createHeaderTable(pdf, "Company", "Name Product", "Price", "Count", "Total", "Date")
 	createPdfTable(pdf, db)
 
 	pdf.Cell(20, 10, "The biggest sales this month:")
 	pdf.Ln(-1)
-	createHeaderTable(pdf, "Company", "Name Product", "Price", "Count", "Total")
+	createHeaderTable(pdf, "Company", "Name Product", "Price", "Count", "Total", "Date")
 	createLargestTable(pdf, db)
 
 	pdf.Cell(20, 10, "Lowest sales sales this month:")
 	pdf.Ln(-1)
-	createHeaderTable(pdf, "Company", "Name Product", "Price", "Count", "Total")
+	createHeaderTable(pdf, "Company", "Name Product", "Price", "Count", "Total", "Date")
 	createLowestTable(pdf, db)
 
 	var buf bytes.Buffer
@@ -82,7 +82,7 @@ func createLineTable(pdf *gofpdf.Fpdf, param string, db *gorm.DB) (sum float64) 
 	for _, sale := range info {
 		sum += (sale.Price * float64(sale.Count))
 		res := []string{sale.Company, sale.NameProduct, strconv.FormatFloat(sale.Price, 'f', 2, 64),
-			strconv.Itoa(sale.Count), strconv.FormatFloat(sale.Total, 'f', 2, 64)}
+			strconv.Itoa(sale.Count), strconv.FormatFloat(sale.Total, 'f', 2, 64), sale.Date.Format("2006-01-02")}
 		data = append(data, res)
 	}
 
